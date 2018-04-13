@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 import tkinter.messagebox as msg
 import configparser as cp
+import ComponentsFactory as comp
 import ntpath
 
 class CentralForm(tk.Toplevel):
@@ -254,15 +255,17 @@ class IniEditor(tk.Tk):
 
                 self.ini_elements[chosen_section][key] = ini_element
 
-            ini_element.pack(fill=tk.X, side=tk.TOP, pady=(0,10))
+            ini_element.pack(fill=tk.X, side=tk.TOP, pady=(0, 10))
 
         save_button = tk.Button(self.right_frame, text="Save Changes", command=self.file_save)
-        save_button.pack(side=tk.BOTTOM, pady=(0,20))
+        save_button.pack(side=tk.BOTTOM, pady=(0, 20))
 
         add_button = tk.Button(self.right_frame, text="Add Item", command=self.add_item_form)
-        add_button.pack(side=tk.BOTTOM, pady=(0,20))
+        add_button.pack(side=tk.BOTTOM, pady=(0, 20))
 
 
 if __name__ == "__main__":
+    for comp_type in ('Button', 'Canvas', 'TextBox', 'Label'):
+        print('Width is {0} of a {1}'.format(comp.ComponentsFactory.create_component(comp_type).get_width(), comp_type))
     ini_editor = IniEditor()
     ini_editor.mainloop()

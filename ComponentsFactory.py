@@ -50,8 +50,3 @@ class ComponentsFactory(object):
             return TextBoxComponent()
         elif comp_type == 'Label':
             return LabelComponent()
-
-
-if __name__ == '__main__':
-    for comp_type in ('Button', 'Canvas', 'TextBox', 'Label'):
-        print('Width is {0} of a {1}'.format(ComponentsFactory.create_component(comp_type).get_width(), comp_type))
