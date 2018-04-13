@@ -6,7 +6,7 @@ import ComponentsFactory as comp
 import ntpath
 
 class CentralForm(tk.Toplevel):
-    def __init__(self, master, my_height=80):
+    def __init__(self, master, my_height=200):
         super().__init__()
         self.master = master
 
@@ -90,18 +90,16 @@ class IniEditor(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        self.title("Config File Editor")
-        self.geometry("600x600")
+        self.title("UI Creator")
+        self.geometry("800x600")
 
-        self.active_ini = ""
-        self.active_ini_filename = ""
         self.ini_elements = {}
 
         self.menubar = tk.Menu(self, bg="lightgrey", fg="black")
 
         self.file_menu = tk.Menu(self.menubar, tearoff=0, bg="lightgrey", fg="black")
         self.file_menu.add_command(label="New", command=self.file_new, accelerator="Ctrl+N")
-        self.file_menu.add_command(label="Open", command=self.file_open, accelerator="Ctrl+O")
+        # self.file_menu.add_command(label="Open", command=self.file_open, accelerator="Ctrl+O")
         self.file_menu.add_command(label="Save", command=self.file_save, accelerator="Ctrl+S")
 
         self.menubar.add_cascade(label="File", menu=self.file_menu)
@@ -123,7 +121,16 @@ class IniEditor(tk.Tk):
         self.section_select.pack(expand=1)
         self.section_select.bind("<<ListboxSelect>>", self.display_section_contents)
 
-        self.section_add_button = tk.Button(self.left_frame, text="Add Section", command=self.add_section_form)
+        self.section_add_button = tk.Button(self.left_frame, text="Add Button", command=self.add_section_form)
+        self.section_add_button.pack(pady=(0,20))
+
+        self.section_add_button = tk.Button(self.left_frame, text="Add Textbox", command=self.add_section_form)
+        self.section_add_button.pack(pady=(0,20))
+
+        self.section_add_button = tk.Button(self.left_frame, text="Add Label", command=self.add_section_form)
+        self.section_add_button.pack(pady=(0,20))
+
+        self.section_add_button = tk.Button(self.left_frame, text="Add Canvas", command=self.add_section_form)
         self.section_add_button.pack(pady=(0,20))
 
         self.left_frame.pack(side=tk.LEFT, fill=tk.BOTH)
@@ -132,13 +139,10 @@ class IniEditor(tk.Tk):
         self.right_frame.bind("<Configure>", self.frame_height)
 
         self.bind("<Control-n>", self.file_new)
-        self.bind("<Control-o>", self.file_open)
+        # self.bind("<Control-o>", self.file_open)
         self.bind("<Control-s>", self.file_save)
 
     def add_section_form(self):
-        if not self.active_ini:
-            msg.showerror("No File Open", "Please open an ini file first")
-            return
 
         AddSectionForm(self)
 
@@ -151,30 +155,9 @@ class IniEditor(tk.Tk):
         self.right_frame.configure(height=new_height)
 
     def file_new(self, event=None):
-        ini_file = filedialog.asksaveasfilename(filetypes=[("Configuration file", "*.ini")])
-
-        while ini_file and not ini_file.endswith(".ini"):
-            msg.showerror("Wrong Filetype", "Filename must end in .ini")
-            ini_file = filedialog.askopenfilename()
-
-        if ini_file:
-            self.parse_ini_file(ini_file)
-
-    def file_open(self, event=None):
-        ini_file = filedialog.askopenfilename(filetypes=[("Configuration file", "*.ini")])
-
-        while ini_file and not ini_file.endswith(".ini"):
-            msg.showerror("Wrong Filetype", "Please select an ini file")
-            ini_file = filedialog.askopenfilename()
-
-        if ini_file:
-            self.parse_ini_file(ini_file)
+        self.ini_elements = []
 
     def file_save(self, event=None):
-        if not self.active_ini:
-            msg.showerror("No File Open", "Please open an ini file first")
-            return
-
         for section in self.active_ini:
             for key in self.active_ini[section]:
                 try:
@@ -183,10 +166,19 @@ class IniEditor(tk.Tk):
                     # wasn't changed, no need to save it
                     pass
 
-        with open(self.active_ini_filename, "w") as ini_file:
-            self.active_ini.write(ini_file)
+        # with open(self.active_ini_filename, "w") as ini_file:
+        #     self.active_ini.write(ini_file)
+        #
+        # msg.showinfo("Saved", "File Saved Successfully")
 
-        msg.showinfo("Saved", "File Saved Successfully")
+        # SAVE AS HTML
+
+        html_file = open("file.html", "w")
+
+
+        # SAVE AS JAVAFX APP
+
+
 
     def add_item_form(self):
         AddItemForm(self)
@@ -222,9 +214,6 @@ class IniEditor(tk.Tk):
             self.ini_elements["DEFAULT"] = {}
 
     def display_section_contents(self, event=None):
-        if not self.active_ini:
-            msg.showerror("No File Open", "Please open an ini file first")
-            return
 
         chosen_section = self.section_select.get(self.section_select.curselection())
 
