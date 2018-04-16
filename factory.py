@@ -6,7 +6,7 @@ import ComponentsFactory as comp
 import ntpath
 
 comp_type_init = ""
-
+components = []
 
 class CentralForm(tk.Toplevel):
     def __init__(self, master, my_height=250):
@@ -73,7 +73,7 @@ class AddSectionForm(CentralForm):
 
         test = "Type: " + comp_type + "\n Width: " + "\n Height: " + height + "\n Text: " + text + "\n X-Pos: " + x_pos + "\n Y-Pos: " + y_pos
         text = comp_type + ", " + text + ", " + width + ",\n " + height + ", " + x_pos + ", " + y_pos
-
+        components.append(new_comp)
         ini_editor.section_select.insert(0, text)
         return new_comp
 
@@ -95,7 +95,7 @@ class IniEditor(tk.Tk):
         self.x = "0"
         self.y = "0"
 
-        self.ini_elements = {}
+        self.ini_elements = []
 
         self.menubar = tk.Menu(self, bg="lightgrey", fg="black")
 
@@ -176,33 +176,24 @@ class IniEditor(tk.Tk):
         self.ini_elements = []
 
     def file_save(self, event=None):
-        for section in self.active_ini:
-            for key in self.active_ini[section]:
-                try:
-                    self.active_ini[section][key] = self.ini_elements[section][key].get()
-                except KeyError:
-                    # wasn't changed, no need to save it
-                    pass
-
-        # with open(self.active_ini_filename, "w") as ini_file:
-        #     self.active_ini.write(ini_file)
-        #
-        # msg.showinfo("Saved", "File Saved Successfully")
-
+        self.writeHTML()
+        self.writeJavaFX()
 
 
     def writeHTML(self):
+        print("WRITING TO HTML")
         self.html_file.write("<html>")
-
-        if self.component == "button":
-            self.html_file.write("<button style=width: %s; height: %s; top: %s; left: %s;>Text</button>" % (self.width, self.height, self.x, self.y))
-        if self.component == "textbox":
-            self.html_file.write("<textbox style=width: %s; height: %s; top: %s; left: %s;></textbox>" % (self.width, self.height, self.x, self.y))
-        if self.component == "label":
-            self.html_file.write("<label style=width: %s; height: %s; top: %s; left: %s;></label>" % (self.width, self.height, self.x, self.y))
-        if self.component == "canvas":
-            self.html_file.write("<canvas style=width: %s; height: %s; top: %s; left: %s;></canvas>" % (self.width, self.height, self.x, self.y))
+        for element in components:
+            if isinstance(element, comp.ButtonComponent):
+                self.html_file.write("<button style=width: %s; height: %s; top: %s; left: %s;>Text</button>" % (element.width, element.height, element.x_pos, element.y_pos))
+            if isinstance(element, comp.TextBoxComponent):
+                self.html_file.write("<textbox style=width: %s; height: %s; top: %s; left: %s;></textbox>" % (element.width, element.height, element.x_pos, element.y_pos))
+            if isinstance(element, comp.LabelComponent):
+                self.html_file.write("<label style=width: %s; height: %s; top: %s; left: %s;></label>" % (element.width, element.height,element.x_pos, element.y_pos))
+            if isinstance(element, comp.CanvasComponent):
+                self.html_file.write("<canvas style=width: %s; height: %s; top: %s; left: %s;></canvas>" % (element.width, element.height, element.x_pos, element.y_pos))
         self.html_file.write("</html>")
+        self.html_file.close()
 
 
 
