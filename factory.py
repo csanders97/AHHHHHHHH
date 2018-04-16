@@ -184,13 +184,13 @@ class IniEditor(tk.Tk):
         self.html_file.write("<html>")
         for element in components:
             if isinstance(element, comp.ButtonComponent):
-                self.html_file.write("<button style=width: %s; height: %s; top: %s; left: %s;>Text</button>" % (element.width, element.height, element.x_pos, element.y_pos))
+                self.html_file.write("<button style='width: %s; height: %s; top: %s; left: %s; position: absolute;'>Text</button>" % (element.width, element.height, element.x_pos, element.y_pos))
             if isinstance(element, comp.TextBoxComponent):
-                self.html_file.write("<textbox style=width: %s; height: %s; top: %s; left: %s;></textbox>" % (element.width, element.height, element.x_pos, element.y_pos))
+                self.html_file.write("<textbox style='width: %s; height: %s; top: %s; left: %s; position: absolute;'></textbox>" % (element.width, element.height, element.x_pos, element.y_pos))
             if isinstance(element, comp.LabelComponent):
-                self.html_file.write("<label style=width: %s; height: %s; top: %s; left: %s;></label>" % (element.width, element.height,element.x_pos, element.y_pos))
+                self.html_file.write("<label style='width: %s; height: %s; top: %s; left: %s; position: absolute;'></label>" % (element.width, element.height,element.x_pos, element.y_pos))
             if isinstance(element, comp.CanvasComponent):
-                self.html_file.write("<canvas style=width: %s; height: %s; top: %s; left: %s;></canvas>" % (element.width, element.height, element.x_pos, element.y_pos))
+                self.html_file.write("<canvas style='width: %s; height: %s; top: %s; left: %s; position: absolute;'></canvas>" % (element.width, element.height, element.x_pos, element.y_pos))
         self.html_file.write("</html>")
         self.html_file.close()
 
@@ -200,9 +200,9 @@ class IniEditor(tk.Tk):
         for element in components:
             count += 1
             if isinstance(element, comp.ButtonComponent):
-                self.javafx_file.write("Button btn%d = new Button(); btn%d.setText('Button');" % (count))
+                self.javafx_file.write("Button btn%d = new Button(); btn%d.setText('Button');" % (count, count))
             if isinstance(element, comp.LabelComponent):
-                self.javafx_file.write("Label label%d = new Label(); label%d.setText('Label')" % (count))
+                self.javafx_file.write("Label label%d = new Label(); label%d.setText('Label')" % (count, count))
         self.javafx_file.write("}}")
         self.javafx_file.close()
 
