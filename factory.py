@@ -69,14 +69,17 @@ class AddSectionForm(CentralForm):
         print(comp_type_init)
         comp_type = comp_type_init
         new_comp = comp.ComponentsFactory.create_component(comp_type, width, height, text, x_pos, y_pos)
-        print('Width is {0} of a {1}'.format(new_comp.get_text(), comp_type))
-
-        test = "Type: " + comp_type + "\n Width: " + "\n Height: " + height + "\n Text: " + text + "\n X-Pos: " + x_pos + "\n Y-Pos: " + y_pos
         text = comp_type + ", " + text + ", " + width + ",\n " + height + ", " + x_pos + ", " + y_pos
         components.append(new_comp)
         ini_editor.section_select.insert(0, text)
+        self.remove_button = tk.Button(text="X", command=self.remove_section)
+        self.remove_button.pack(side=tk.TOP, fill=tk.X, pady=(10, 0), padx=10)
         return new_comp
 
+    def remove_section(self):
+        ini_editor.section_select.delete(0, 0)
+        self.remove_button.destroy()
+        print("removed")
 
 class IniEditor(tk.Tk):
 
