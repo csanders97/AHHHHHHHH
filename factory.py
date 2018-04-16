@@ -6,7 +6,7 @@ import ComponentsFactory as comp
 import ntpath
 
 class CentralForm(tk.Toplevel):
-    def __init__(self, master, my_height=200):
+    def __init__(self, master, my_height=250):
         super().__init__()
         self.master = master
 
@@ -29,26 +29,50 @@ class AddSectionForm(CentralForm):
     def __init__(self, master):
         super().__init__(master)
 
-        self.title("Add New Section")
+        self.title("Add New Component")
 
         self.main_frame = tk.Frame(self, bg="lightgrey")
-        self.name_label = tk.Label(self.main_frame, text="Section Name", bg="lightgrey", fg="black")
-        self.name_entry = tk.Entry(self.main_frame, bg="white", fg="black")
+        self.text_label = tk.Label(self.main_frame, text="Text", bg="lightgrey", fg="black")
+        self.text_entry = tk.Entry(self.main_frame, bg="white", fg="black")
+        self.width_label = tk.Label(self.main_frame, text="Width", bg="lightgrey", fg="black")
+        self.width_entry = tk.Entry(self.main_frame, bg="white", fg="black")
+        self.height_label = tk.Label(self.main_frame, text="Height", bg="lightgrey", fg="black")
+        self.height_entry = tk.Entry(self.main_frame, bg="white", fg="black")
+        self.x_pos_label = tk.Label(self.main_frame, text="X-Position", bg="lightgrey", fg="black")
+        self.x_pos_entry = tk.Entry(self.main_frame, bg="white", fg="black")
+        self.y_pos_label = tk.Label(self.main_frame, text="Y-Position", bg="lightgrey", fg="black")
+        self.y_pos_entry = tk.Entry(self.main_frame, bg="white", fg="black")
         self.submit_button = tk.Button(self.main_frame, text="Create", command=self.create_section)
 
         self.main_frame.pack(expand=1, fill=tk.BOTH)
-        self.name_label.pack(side=tk.TOP, fill=tk.X)
-        self.name_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
+        self.text_label.pack(side=tk.TOP, fill=tk.X)
+        self.text_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
+        self.width_label.pack(side=tk.TOP, fill=tk.X)
+        self.width_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
+        self.height_label.pack(side=tk.TOP, fill=tk.X)
+        self.height_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
+        self.x_pos_label.pack(side=tk.TOP, fill=tk.X)
+        self.x_pos_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
+        self.y_pos_label.pack(side=tk.TOP, fill=tk.X)
+        self.y_pos_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
         self.submit_button.pack(side=tk.TOP, fill=tk.X, pady=(10,0), padx=10)
 
     def create_section(self):
-        section_name = self.name_entry.get()
-        if section_name:
-            self.master.add_section(section_name)
-            self.destroy()
-            msg.showinfo("Section Added", "Section " + section_name + " successfully added")
-        else:
-            msg.showerror("No Name", "Please enter a section name", parent=self)
+        # section_name = self.name_entry.get()
+        # if section_name:
+        #     self.master.add_section(section_name)
+        #     self.destroy()
+        #     msg.showinfo("Section Added", "Section " + section_name + " successfully added")
+        # else:
+        #     msg.showerror("No Name", "Please enter a section name", parent=self)
+        text = self.text_entry.get()
+        width = self.width_entry.get()
+        height = self.height_entry.get()
+        x_pos = self.x_pos_entry.get()
+        y_pos = self.y_pos_entry.get()
+        comp_type = 'Button'
+        new_comp = comp.ComponentsFactory.create_component(comp_type, width, height, text, x_pos, y_pos)
+        print('Width is {0} of a {1}'.format(new_comp.get_text(), comp_type))
 
 
 class AddItemForm(CentralForm):
@@ -254,7 +278,5 @@ class IniEditor(tk.Tk):
 
 
 if __name__ == "__main__":
-    for comp_type in ('Button', 'Canvas', 'TextBox', 'Label'):
-        print('Width is {0} of a {1}'.format(comp.ComponentsFactory.create_component(comp_type).get_width(), comp_type))
     ini_editor = IniEditor()
     ini_editor.mainloop()

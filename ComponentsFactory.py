@@ -1,8 +1,11 @@
 class BaseComponent(object):
 
-    def __init__(self):
-        self.width = 1
-        self.height = 1
+    def __init__(self, text, width, height, x_pos, y_pos):
+        self.width = width
+        self.height = height
+        self.text = text
+        self.x_pos = x_pos
+        self.y_pos = y_pos
 
     def get_width(self):
         return self.width
@@ -10,43 +13,64 @@ class BaseComponent(object):
     def get_height(self):
         return self.height
 
+    def get_text(self):
+        return self.text
+
+    def get_x_pos(self):
+        return self.x_pos
+
+    def get_y_pos(self):
+        return self.y_pos
+
 
 class ButtonComponent(BaseComponent):
 
-    def __init__(self):
-        self.width = 10
-        self.height = 10
+    def __init__(self, width, height, text, x_pos, y_pos):
+        self.width = width
+        self.height = height
+        self.text = text
+        self.x_pos = x_pos
+        self.y_pos = y_pos
 
 
 class CanvasComponent(BaseComponent):
 
-    def __init__(self):
-        self.width = 20
-        self.height = 20
+    def __init__(self, width, height, text, x_pos, y_pos):
+        self.width = width
+        self.height = height
+        self.text = text
+        self.x_pos = x_pos
+        self.y_pos = y_pos
 
 
 class TextBoxComponent(BaseComponent):
 
-    def __init__(self):
-        self.width = 30
-        self.height = 30
+    def __init__(self, width, height, text, x_pos, y_pos):
+        self.width = width
+        self.height = height
+        self.text = text
+        self.x_pos = x_pos
+        self.y_pos = y_pos
 
 
 class LabelComponent(BaseComponent):
 
-    def __init__(self):
-        self.width = 40
-        self.height = 40
+    def __init__(self, width, height, text, x_pos, y_pos):
+        self.width = width
+        self.height = height
+        self.text = text
+        self.x_pos = x_pos
+        self.y_pos = y_pos
 
 
 class ComponentsFactory(object):
     @staticmethod
-    def create_component(comp_type):
+    def create_component(comp_type, width, height, text, x_pos, y_pos):
         if comp_type == 'Button':
-            return ButtonComponent()
+            return ButtonComponent(width, height, text, x_pos, y_pos)
         elif comp_type == 'Canvas':
-            return CanvasComponent()
+            return CanvasComponent(width, height, text, x_pos, y_pos)
         elif comp_type == 'TextBox':
-            return TextBoxComponent()
+            return TextBoxComponent(width, height, text, x_pos, y_pos)
         elif comp_type == 'Label':
-            return LabelComponent()
+            return LabelComponent(width, height, text, x_pos, y_pos)
