@@ -88,7 +88,7 @@ class IniEditor(tk.Tk):
 
         self.html_file = open("file.html", "w")
         # SAVE AS JAVAFX APP
-        self.javafx_file = open("file.fx", "w")
+        self.javafx_file = open("file.java", "w")
         self.component = "button"
         self.width = "100%"
         self.height = "20px"
