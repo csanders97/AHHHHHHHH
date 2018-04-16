@@ -2,10 +2,13 @@ import tkinter as tk
 from tkinter import filedialog
 import tkinter.messagebox as msg
 import configparser as cp
+import ComponentsFactory as comp
 import ntpath
 
+comp_type_init = ""
+
 class CentralForm(tk.Toplevel):
-    def __init__(self, master, my_height=200):
+    def __init__(self, master, my_height=250):
         super().__init__()
         self.master = master
 
@@ -28,60 +31,56 @@ class AddSectionForm(CentralForm):
     def __init__(self, master):
         super().__init__(master)
 
-        self.title("Add New Section")
+        self.title("Add New Component")
 
         self.main_frame = tk.Frame(self, bg="lightgrey")
-        self.name_label = tk.Label(self.main_frame, text="Section Name", bg="lightgrey", fg="black")
-        self.name_entry = tk.Entry(self.main_frame, bg="white", fg="black")
+        self.text_label = tk.Label(self.main_frame, text="Text", bg="lightgrey", fg="black")
+        self.text_entry = tk.Entry(self.main_frame, bg="white", fg="black")
+        self.width_label = tk.Label(self.main_frame, text="Width", bg="lightgrey", fg="black")
+        self.width_entry = tk.Entry(self.main_frame, bg="white", fg="black")
+        self.height_label = tk.Label(self.main_frame, text="Height", bg="lightgrey", fg="black")
+        self.height_entry = tk.Entry(self.main_frame, bg="white", fg="black")
+        self.x_pos_label = tk.Label(self.main_frame, text="X-Position", bg="lightgrey", fg="black")
+        self.x_pos_entry = tk.Entry(self.main_frame, bg="white", fg="black")
+        self.y_pos_label = tk.Label(self.main_frame, text="Y-Position", bg="lightgrey", fg="black")
+        self.y_pos_entry = tk.Entry(self.main_frame, bg="white", fg="black")
         self.submit_button = tk.Button(self.main_frame, text="Create", command=self.create_section)
 
         self.main_frame.pack(expand=1, fill=tk.BOTH)
-        self.name_label.pack(side=tk.TOP, fill=tk.X)
-        self.name_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
+        self.text_label.pack(side=tk.TOP, fill=tk.X)
+        self.text_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
+        self.width_label.pack(side=tk.TOP, fill=tk.X)
+        self.width_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
+        self.height_label.pack(side=tk.TOP, fill=tk.X)
+        self.height_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
+        self.x_pos_label.pack(side=tk.TOP, fill=tk.X)
+        self.x_pos_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
+        self.y_pos_label.pack(side=tk.TOP, fill=tk.X)
+        self.y_pos_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
         self.submit_button.pack(side=tk.TOP, fill=tk.X, pady=(10,0), padx=10)
 
     def create_section(self):
-        section_name = self.name_entry.get()
-        if section_name:
-            self.master.add_section(section_name)
-            self.destroy()
-            msg.showinfo("Section Added", "Section " + section_name + " successfully added")
-        else:
-            msg.showerror("No Name", "Please enter a section name", parent=self)
+        # section_name = self.name_entry.get()
+        # if section_name:
+        #     self.master.add_section(section_name)
+        #     self.destroy()
+        #     msg.showinfo("Section Added", "Section " + section_name + " successfully added")
+        # else:
+        #     msg.showerror("No Name", "Please enter a section name", parent=self)
+        text = self.text_entry.get()
+        width = self.width_entry.get()
+        height = self.height_entry.get()
+        x_pos = self.x_pos_entry.get()
+        y_pos = self.y_pos_entry.get()
+        print(comp_type_init)
+        comp_type = comp_type_init
+        new_comp = comp.ComponentsFactory.create_component(comp_type, width, height, text, x_pos, y_pos)
+        print('Width is {0} of a {1}'.format(new_comp.get_text(), comp_type))
 
+        test = "Type: " + comp_type + "\n Width: " + "\n Height: " + height + "\n Text: " + text + "\n X-Pos: " + x_pos + "\n Y-Pos: " + y_pos
+        text = comp_type + ", " + text + ", " + width + ",\n " + height + ", " + x_pos + ", " + y_pos
 
-class AddItemForm(CentralForm):
-    def __init__(self,  master):
-
-        my_height = 120
-
-        super().__init__(master, my_height)
-
-        self.title("Add New Item")
-
-        self.main_frame = tk.Frame(self, bg="lightgrey")
-        self.name_label = tk.Label(self.main_frame, text="Item Name", bg="lightgrey", fg="black")
-        self.name_entry = tk.Entry(self.main_frame, bg="white", fg="black")
-        self.value_label = tk.Label(self.main_frame, text="Item Value", bg="lightgrey", fg="black")
-        self.value_entry = tk.Entry(self.main_frame, bg="white", fg="black")
-        self.submit_button = tk.Button(self.main_frame, text="Create", command=self.create_item)
-
-        self.main_frame.pack(fill=tk.BOTH, expand=1)
-        self.name_label.pack(side=tk.TOP, fill=tk.X)
-        self.name_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
-        self.value_label.pack(side=tk.TOP, fill=tk.X)
-        self.value_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
-        self.submit_button.pack(side=tk.TOP, fill=tk.X, pady=(10,0), padx=10)
-
-    def create_item(self):
-        item_name = self.name_entry.get()
-        item_value = self.value_entry.get()
-        if item_name and item_value:
-            self.master.add_item(item_name, item_value)
-            self.destroy()
-            msg.showinfo("Item Added", item_name + " successfully added")
-        else:
-            msg.showerror("Missing Info", "Please enter a name and value", parent=self)
+        ini_editor.section_select.insert(0, text)
 
 
 class IniEditor(tk.Tk):
@@ -120,16 +119,16 @@ class IniEditor(tk.Tk):
         self.section_select.pack(expand=1)
         self.section_select.bind("<<ListboxSelect>>", self.display_section_contents)
 
-        self.section_add_button = tk.Button(self.left_frame, text="Add Button", command=self.add_section_form)
+        self.section_add_button = tk.Button(self.left_frame, text="Add Button", command=self.button_add_section_form)
         self.section_add_button.pack(pady=(0,20))
 
-        self.section_add_button = tk.Button(self.left_frame, text="Add Textbox", command=self.add_section_form)
+        self.section_add_button = tk.Button(self.left_frame, text="Add Textbox", command=self.textbox_add_section_form)
         self.section_add_button.pack(pady=(0,20))
 
-        self.section_add_button = tk.Button(self.left_frame, text="Add Label", command=self.add_section_form)
+        self.section_add_button = tk.Button(self.left_frame, text="Add Label", command=self.label_add_section_form)
         self.section_add_button.pack(pady=(0,20))
 
-        self.section_add_button = tk.Button(self.left_frame, text="Add Canvas", command=self.add_section_form)
+        self.section_add_button = tk.Button(self.left_frame, text="Add Canvas", command=self.canvas_add_section_form)
         self.section_add_button.pack(pady=(0,20))
 
         self.left_frame.pack(side=tk.LEFT, fill=tk.BOTH)
@@ -141,8 +140,24 @@ class IniEditor(tk.Tk):
         # self.bind("<Control-o>", self.file_open)
         self.bind("<Control-s>", self.file_save)
 
-    def add_section_form(self):
+    def button_add_section_form(self):
+        global comp_type_init
+        comp_type_init = "Button"
+        AddSectionForm(self)
 
+    def textbox_add_section_form(self):
+        global comp_type_init
+        comp_type_init = "TextBox"
+        AddSectionForm(self)
+
+    def label_add_section_form(self):
+        global comp_type_init
+        comp_type_init = "Label"
+        AddSectionForm(self)
+
+    def canvas_add_section_form(self):
+        global comp_type_init
+        comp_type_init = "Canvas"
         AddSectionForm(self)
 
     def add_section(self, section_name):
@@ -170,8 +185,6 @@ class IniEditor(tk.Tk):
         #
         # msg.showinfo("Saved", "File Saved Successfully")
 
-        # SAVE AS HTML
-
         html_file = open("file.html", "w")
         component = "button"
         w = "100%"
@@ -181,35 +194,36 @@ class IniEditor(tk.Tk):
 
         def writeHTML():
             html_file.write("<html>")
-            if component == "button":
-                html_file.write("<button style=width: %s; height: %s; top: %s; left: %s;>Text</button>" % (w, h, t, l))
-            if component == "textbox":
-                html_file.write("<textbox style=width: %s; height: %s; top: %s; left: %s;></textbox>" % (w, h, t, l))
-            if component == "label":
-                html_file.write("<label style=width: %s; height: %s; top: %s; left: %s;></label>" % (w, h, t, l))
-            if component == "canvas":
-                html_file.write("<canvas style=width: %s; height: %s; top: %s; left: %s;></canvas>" % (w, h, t, l))
-            html_file.write("</html>")
 
+        if component == "button":
+            html_file.write("<button style=width: %s; height: %s; top: %s; left: %s;>Text</button>" % (w, h, t, l))
+        if component == "textbox":
+            html_file.write("<textbox style=width: %s; height: %s; top: %s; left: %s;></textbox>" % (w, h, t, l))
+        if component == "label":
+            html_file.write("<label style=width: %s; height: %s; top: %s; left: %s;></label>" % (w, h, t, l))
+        if component == "canvas":
+            html_file.write("<canvas style=width: %s; height: %s; top: %s; left: %s;></canvas>" % (w, h, t, l))
+        html_file.write("</html>")
 
         # SAVE AS JAVAFX APP
-
         javafx_file = open("file.fx", "w")
 
         def writeJavaFX():
             if component == "label":
-                javafx_file.write("Label label1 = new Label(); label1.setStyle('width: %s; height: %s; top: %s; left: %s;');" % (w, h, t, l))
-            if component == "button":
-                javafx_file.write("Button button1 = new Button(); button1.setStyle('width: %s; height: %s; top: %s; left: %s;');" % (w, h, t, l))
+                    javafx_file.write(
+                    "Label label1 = new Label(); label1.setStyle('width: %s; height: %s; top: %s; left: %s;');" % (
+                    w, h, t, l))
+
+        if component == "button":
+                javafx_file.write(
+                "Button button1 = new Button(); button1.setStyle('width: %s; height: %s; top: %s; left: %s;');" % (
+                w, h, t, l))
 
 
-    def add_item_form(self):
-        AddItemForm(self)
-
-    def add_item(self, item_name, item_value):
-        chosen_section = self.section_select.get(self.section_select.curselection())
-        self.active_ini[chosen_section][item_name] = item_value
-        self.display_section_contents()
+        def add_item(self, item_name, item_value):
+            chosen_section = self.section_select.get(self.section_select.curselection())
+            self.active_ini[chosen_section][item_name] = item_value
+            self.display_section_contents()
 
     def parse_ini_file(self, ini_file):
         self.active_ini = cp.ConfigParser()
@@ -267,13 +281,13 @@ class IniEditor(tk.Tk):
 
                 self.ini_elements[chosen_section][key] = ini_element
 
-            ini_element.pack(fill=tk.X, side=tk.TOP, pady=(0,10))
+            ini_element.pack(fill=tk.X, side=tk.TOP, pady=(0, 10))
 
         save_button = tk.Button(self.right_frame, text="Save Changes", command=self.file_save)
-        save_button.pack(side=tk.BOTTOM, pady=(0,20))
+        save_button.pack(side=tk.BOTTOM, pady=(0, 20))
 
         add_button = tk.Button(self.right_frame, text="Add Item", command=self.add_item_form)
-        add_button.pack(side=tk.BOTTOM, pady=(0,20))
+        add_button.pack(side=tk.BOTTOM, pady=(0, 20))
 
 
 if __name__ == "__main__":
