@@ -184,13 +184,13 @@ class IniEditor(tk.Tk):
         self.html_file.write("<html>")
         for element in components:
             if isinstance(element, comp.ButtonComponent):
-                self.html_file.write("<button style='width: %s; height: %s; top: %s; left: %s; position: absolute;'>Text</button>" % (element.width, element.height, element.x_pos, element.y_pos))
+                self.html_file.write("<button style='width: %s; height: %s; top: %s; left: %s; position: absolute;'>%s</button>" % (element.width, element.height, element.x_pos, element.y_pos, element.text))
             if isinstance(element, comp.TextBoxComponent):
-                self.html_file.write("<textbox style='width: %s; height: %s; top: %s; left: %s; position: absolute;'></textbox>" % (element.width, element.height, element.x_pos, element.y_pos))
+                self.html_file.write("<textbox style='width: %s; height: %s; top: %s; left: %s; position: absolute;'>%s</textbox>" % (element.width, element.height, element.x_pos, element.y_pos, element.text))
             if isinstance(element, comp.LabelComponent):
-                self.html_file.write("<label style='width: %s; height: %s; top: %s; left: %s; position: absolute;'></label>" % (element.width, element.height,element.x_pos, element.y_pos))
+                self.html_file.write("<label style='width: %s; height: %s; top: %s; left: %s; position: absolute;'>%s</label>" % (element.width, element.height,element.x_pos, element.y_pos, element.text))
             if isinstance(element, comp.CanvasComponent):
-                self.html_file.write("<canvas style='width: %s; height: %s; top: %s; left: %s; position: absolute;'></canvas>" % (element.width, element.height, element.x_pos, element.y_pos))
+                self.html_file.write("<canvas style='width: %s; height: %s; top: %s; left: %s; position: absolute;'>%s</canvas>" % (element.width, element.height, element.x_pos, element.y_pos, element.text))
         self.html_file.write("</html>")
         self.html_file.close()
 
