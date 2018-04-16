@@ -6,6 +6,7 @@ import ComponentsFactory as comp
 import ntpath
 
 comp_type_init = ""
+components = []
 
 class CentralForm(tk.Toplevel):
     def __init__(self, master, my_height=250):
@@ -57,16 +58,9 @@ class AddSectionForm(CentralForm):
         self.x_pos_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
         self.y_pos_label.pack(side=tk.TOP, fill=tk.X)
         self.y_pos_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
-        self.submit_button.pack(side=tk.TOP, fill=tk.X, pady=(10,0), padx=10)
+        self.submit_button.pack(side=tk.TOP, fill=tk.X, pady=(10, 0), padx=10)
 
     def create_section(self):
-        # section_name = self.name_entry.get()
-        # if section_name:
-        #     self.master.add_section(section_name)
-        #     self.destroy()
-        #     msg.showinfo("Section Added", "Section " + section_name + " successfully added")
-        # else:
-        #     msg.showerror("No Name", "Please enter a section name", parent=self)
         text = self.text_entry.get()
         width = self.width_entry.get()
         height = self.height_entry.get()
@@ -79,8 +73,9 @@ class AddSectionForm(CentralForm):
 
         test = "Type: " + comp_type + "\n Width: " + "\n Height: " + height + "\n Text: " + text + "\n X-Pos: " + x_pos + "\n Y-Pos: " + y_pos
         text = comp_type + ", " + text + ", " + width + ",\n " + height + ", " + x_pos + ", " + y_pos
-
+        components.append(new_comp)
         ini_editor.section_select.insert(0, text)
+        return new_comp
 
 
 class IniEditor(tk.Tk):
@@ -91,7 +86,16 @@ class IniEditor(tk.Tk):
         self.title("UI Creator")
         self.geometry("800x600")
 
-        self.ini_elements = {}
+        self.html_file = open("file.html", "w")
+        # SAVE AS JAVAFX APP
+        self.javafx_file = open("file.fx", "w")
+        self.component = "button"
+        self.width = "100%"
+        self.height = "20px"
+        self.x = "0"
+        self.y = "0"
+
+        self.ini_elements = []
 
         self.menubar = tk.Menu(self, bg="lightgrey", fg="black")
 
@@ -120,16 +124,16 @@ class IniEditor(tk.Tk):
         self.section_select.bind("<<ListboxSelect>>", self.display_section_contents)
 
         self.section_add_button = tk.Button(self.left_frame, text="Add Button", command=self.button_add_section_form)
-        self.section_add_button.pack(pady=(0,20))
+        self.section_add_button.pack(pady=(0, 20))
 
         self.section_add_button = tk.Button(self.left_frame, text="Add Textbox", command=self.textbox_add_section_form)
-        self.section_add_button.pack(pady=(0,20))
+        self.section_add_button.pack(pady=(0, 20))
 
         self.section_add_button = tk.Button(self.left_frame, text="Add Label", command=self.label_add_section_form)
-        self.section_add_button.pack(pady=(0,20))
+        self.section_add_button.pack(pady=(0, 20))
 
         self.section_add_button = tk.Button(self.left_frame, text="Add Canvas", command=self.canvas_add_section_form)
-        self.section_add_button.pack(pady=(0,20))
+        self.section_add_button.pack(pady=(0, 20))
 
         self.left_frame.pack(side=tk.LEFT, fill=tk.BOTH)
         self.right_frame.pack(side=tk.LEFT, expand=1, fill=tk.BOTH)
@@ -172,69 +176,40 @@ class IniEditor(tk.Tk):
         self.ini_elements = []
 
     def file_save(self, event=None):
-        for section in self.active_ini:
-            for key in self.active_ini[section]:
-                try:
-                    self.active_ini[section][key] = self.ini_elements[section][key].get()
-                except KeyError:
-                    # wasn't changed, no need to save it
-                    pass
-
-        # with open(self.active_ini_filename, "w") as ini_file:
-        #     self.active_ini.write(ini_file)
-        #
-        # msg.showinfo("Saved", "File Saved Successfully")
-
-        html_file = open("file.html", "w")
-        component = "button"
-        w = "100%"
-        h = "20px"
-        t = "0"
-        l = "0"
-
-        def writeHTML():
-            html_file.write("<html>")
-
-        if component == "button":
-            html_file.write("<button style=width: %s; height: %s; top: %s; left: %s;>Text</button>" % (w, h, t, l))
-        if component == "textbox":
-            html_file.write("<textbox style=width: %s; height: %s; top: %s; left: %s;></textbox>" % (w, h, t, l))
-        if component == "label":
-            html_file.write("<label style=width: %s; height: %s; top: %s; left: %s;></label>" % (w, h, t, l))
-        if component == "canvas":
-            html_file.write("<canvas style=width: %s; height: %s; top: %s; left: %s;></canvas>" % (w, h, t, l))
-        html_file.write("</html>")
-
-        # SAVE AS JAVAFX APP
-        javafx_file = open("file.fx", "w")
-
-        def writeJavaFX():
-            if component == "label":
-                    javafx_file.write(
-                    "Label label1 = new Label(); label1.setStyle('width: %s; height: %s; top: %s; left: %s;');" % (
-                    w, h, t, l))
-
-        if component == "button":
-                javafx_file.write(
-                "Button button1 = new Button(); button1.setStyle('width: %s; height: %s; top: %s; left: %s;');" % (
-                w, h, t, l))
+        self.writeHTML()
+        self.writeJavaFX()
 
 
-        def add_item(self, item_name, item_value):
-            chosen_section = self.section_select.get(self.section_select.curselection())
-            self.active_ini[chosen_section][item_name] = item_value
-            self.display_section_contents()
+    def writeHTML(self):
+        print("WRITING TO HTML")
+        self.html_file.write("<html>")
+        for element in components:
+            if isinstance(element, comp.ButtonComponent):
+                self.html_file.write("<button style=width: %s; height: %s; top: %s; left: %s;>Text</button>" % (element.width, element.height, element.x_pos, element.y_pos))
+            if isinstance(element, comp.TextBoxComponent):
+                self.html_file.write("<textbox style=width: %s; height: %s; top: %s; left: %s;></textbox>" % (element.width, element.height, element.x_pos, element.y_pos))
+            if isinstance(element, comp.LabelComponent):
+                self.html_file.write("<label style=width: %s; height: %s; top: %s; left: %s;></label>" % (element.width, element.height,element.x_pos, element.y_pos))
+            if isinstance(element, comp.CanvasComponent):
+                self.html_file.write("<canvas style=width: %s; height: %s; top: %s; left: %s;></canvas>" % (element.width, element.height, element.x_pos, element.y_pos))
+        self.html_file.write("</html>")
+        self.html_file.close()
 
-    def parse_ini_file(self, ini_file):
-        self.active_ini = cp.ConfigParser()
-        self.active_ini.read(ini_file)
-        self.active_ini_filename = ini_file
-        self.populate_section_select_box()
 
-        file_name = ": ".join([ntpath.basename(ini_file), ini_file])
-        self.file_name_var.set(file_name)
 
-        self.clear_right_frame()
+    def writeJavaFX(self):
+        if self.component == "label":
+            self.javafx_file.write(
+                "Label label1 = new Label(); label1.setStyle('width: %s; height: %s; top: %s; left: %s;');" % (self.width, self.height, self.x, self.y))
+
+        if self.component == "button":
+            self.javafx_file.write(
+                "Button button1 = new Button(); button1.setStyle('width: %s; height: %s; top: %s; left: %s;');" % (self.width, self.height, self.x, self.y))
+
+    def add_item(self, item_name, item_value):
+        chosen_section = self.section_select.get(self.section_select.curselection())
+        self.active_ini[chosen_section][item_name] = item_value
+        self.display_section_contents()
 
     def clear_right_frame(self):
         for child in self.right_frame.winfo_children():
@@ -259,7 +234,7 @@ class IniEditor(tk.Tk):
 
         for key in sorted(self.active_ini[chosen_section]):
             new_label = tk.Label(self.right_frame, text=key, font=(None, 12), bg="black", fg="white")
-            new_label.pack(fill=tk.X, side=tk.TOP, pady=(10,0))
+            new_label.pack(fill=tk.X, side=tk.TOP, pady=(10, 0))
 
             try:
                 section_elements = self.ini_elements[chosen_section]
@@ -274,7 +249,8 @@ class IniEditor(tk.Tk):
                 if value.isnumeric():
                     spinbox_default = tk.IntVar(self.right_frame)
                     spinbox_default.set(int(value))
-                    ini_element = tk.Spinbox(self.right_frame, from_=0, to=99999, textvariable=spinbox_default, bg="white", fg="black", justify="center")
+                    ini_element = tk.Spinbox(self.right_frame, from_=0, to=99999, textvariable=spinbox_default,
+                                             bg="white", fg="black", justify="center")
                 else:
                     ini_element = tk.Entry(self.right_frame, bg="white", fg="black", justify="center")
                     ini_element.insert(0, value)

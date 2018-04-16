@@ -26,41 +26,26 @@ class BaseComponent(object):
 class ButtonComponent(BaseComponent):
 
     def __init__(self, width, height, text, x_pos, y_pos):
-        self.width = width
-        self.height = height
-        self.text = text
-        self.x_pos = x_pos
-        self.y_pos = y_pos
+        super().__init__(text, width, height, x_pos, y_pos)
+
 
 
 class CanvasComponent(BaseComponent):
 
     def __init__(self, width, height, text, x_pos, y_pos):
-        self.width = width
-        self.height = height
-        self.text = text
-        self.x_pos = x_pos
-        self.y_pos = y_pos
+        super().__init__(text, width, height, x_pos, y_pos)
 
 
 class TextBoxComponent(BaseComponent):
 
     def __init__(self, width, height, text, x_pos, y_pos):
-        self.width = width
-        self.height = height
-        self.text = text
-        self.x_pos = x_pos
-        self.y_pos = y_pos
+        super().__init__(text, width, height, x_pos, y_pos)
 
 
 class LabelComponent(BaseComponent):
 
     def __init__(self, width, height, text, x_pos, y_pos):
-        self.width = width
-        self.height = height
-        self.text = text
-        self.x_pos = x_pos
-        self.y_pos = y_pos
+        super().__init__(text, width, height, x_pos, y_pos)
 
 
 class ComponentsFactory(object):
