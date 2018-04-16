@@ -5,6 +5,8 @@ import configparser as cp
 import ComponentsFactory as comp
 import ntpath
 
+comp_type_init = ""
+
 class CentralForm(tk.Toplevel):
     def __init__(self, master, my_height=250):
         super().__init__()
@@ -70,43 +72,15 @@ class AddSectionForm(CentralForm):
         height = self.height_entry.get()
         x_pos = self.x_pos_entry.get()
         y_pos = self.y_pos_entry.get()
-        comp_type = 'Button'
+        print(comp_type_init)
+        comp_type = comp_type_init
         new_comp = comp.ComponentsFactory.create_component(comp_type, width, height, text, x_pos, y_pos)
         print('Width is {0} of a {1}'.format(new_comp.get_text(), comp_type))
 
+        test = "Type: " + comp_type + "\n Width: " + "\n Height: " + height + "\n Text: " + text + "\n X-Pos: " + x_pos + "\n Y-Pos: " + y_pos
+        text = comp_type + "" + width + "" + height + "" + text + "" + x_pos + "" + y_pos
 
-class AddItemForm(CentralForm):
-    def __init__(self,  master):
-
-        my_height = 120
-
-        super().__init__(master, my_height)
-
-        self.title("Add New Item")
-
-        self.main_frame = tk.Frame(self, bg="lightgrey")
-        self.name_label = tk.Label(self.main_frame, text="Item Name", bg="lightgrey", fg="black")
-        self.name_entry = tk.Entry(self.main_frame, bg="white", fg="black")
-        self.value_label = tk.Label(self.main_frame, text="Item Value", bg="lightgrey", fg="black")
-        self.value_entry = tk.Entry(self.main_frame, bg="white", fg="black")
-        self.submit_button = tk.Button(self.main_frame, text="Create", command=self.create_item)
-
-        self.main_frame.pack(fill=tk.BOTH, expand=1)
-        self.name_label.pack(side=tk.TOP, fill=tk.X)
-        self.name_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
-        self.value_label.pack(side=tk.TOP, fill=tk.X)
-        self.value_entry.pack(side=tk.TOP, fill=tk.X, padx=10)
-        self.submit_button.pack(side=tk.TOP, fill=tk.X, pady=(10,0), padx=10)
-
-    def create_item(self):
-        item_name = self.name_entry.get()
-        item_value = self.value_entry.get()
-        if item_name and item_value:
-            self.master.add_item(item_name, item_value)
-            self.destroy()
-            msg.showinfo("Item Added", item_name + " successfully added")
-        else:
-            msg.showerror("Missing Info", "Please enter a name and value", parent=self)
+        ini_editor.section_select.insert(0, text)
 
 
 class IniEditor(tk.Tk):
@@ -145,16 +119,16 @@ class IniEditor(tk.Tk):
         self.section_select.pack(expand=1)
         self.section_select.bind("<<ListboxSelect>>", self.display_section_contents)
 
-        self.section_add_button = tk.Button(self.left_frame, text="Add Button", command=self.add_section_form)
+        self.section_add_button = tk.Button(self.left_frame, text="Add Button", command=self.button_add_section_form)
         self.section_add_button.pack(pady=(0,20))
 
-        self.section_add_button = tk.Button(self.left_frame, text="Add Textbox", command=self.add_section_form)
+        self.section_add_button = tk.Button(self.left_frame, text="Add Textbox", command=self.textbox_add_section_form)
         self.section_add_button.pack(pady=(0,20))
 
-        self.section_add_button = tk.Button(self.left_frame, text="Add Label", command=self.add_section_form)
+        self.section_add_button = tk.Button(self.left_frame, text="Add Label", command=self.label_add_section_form)
         self.section_add_button.pack(pady=(0,20))
 
-        self.section_add_button = tk.Button(self.left_frame, text="Add Canvas", command=self.add_section_form)
+        self.section_add_button = tk.Button(self.left_frame, text="Add Canvas", command=self.canvas_add_section_form)
         self.section_add_button.pack(pady=(0,20))
 
         self.left_frame.pack(side=tk.LEFT, fill=tk.BOTH)
@@ -166,8 +140,24 @@ class IniEditor(tk.Tk):
         # self.bind("<Control-o>", self.file_open)
         self.bind("<Control-s>", self.file_save)
 
-    def add_section_form(self):
+    def button_add_section_form(self):
+        global comp_type_init
+        comp_type_init = "Button"
+        AddSectionForm(self)
 
+    def textbox_add_section_form(self):
+        global comp_type_init
+        comp_type_init = "TextBox"
+        AddSectionForm(self)
+
+    def label_add_section_form(self):
+        global comp_type_init
+        comp_type_init = "Label"
+        AddSectionForm(self)
+
+    def canvas_add_section_form(self):
+        global comp_type_init
+        comp_type_init = "Canvas"
         AddSectionForm(self)
 
     def add_section(self, section_name):
@@ -201,11 +191,6 @@ class IniEditor(tk.Tk):
 
 
         # SAVE AS JAVAFX APP
-
-
-
-    def add_item_form(self):
-        AddItemForm(self)
 
     def add_item(self, item_name, item_value):
         chosen_section = self.section_select.get(self.section_select.curselection())
