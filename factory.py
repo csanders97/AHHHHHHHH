@@ -76,8 +76,9 @@ class AddSectionForm(CentralForm):
         comp_type = comp_type_init
         new_comp = comp.ComponentsFactory.create_component(comp_type, width, height, text, x_pos, y_pos)
         print('Width is {0} of a {1}'.format(new_comp.get_text(), comp_type))
+        test = "Type: " + comp_type + "\n Width: " + "\n Height: " + height + "\n Text: " + text + \
+               "\n X-Pos: " + x_pos + "\n Y-Pos: " + y_pos
 
-        test = "Type: " + comp_type + "\n Width: " + "\n Height: " + height + "\n Text: " + text + "\n X-Pos: " + x_pos + "\n Y-Pos: " + y_pos
         text = comp_type + ", " + text + ", " + width + ",\n " + height + ", " + x_pos + ", " + y_pos
 
         ini_editor.section_select.insert(0, text)
@@ -195,29 +196,30 @@ class IniEditor(tk.Tk):
         def writeHTML():
             html_file.write("<html>")
 
-        if component == "button":
-            html_file.write("<button style=width: %s; height: %s; top: %s; left: %s;>Text</button>" % (w, h, t, l))
-        if component == "textbox":
-            html_file.write("<textbox style=width: %s; height: %s; top: %s; left: %s;></textbox>" % (w, h, t, l))
-        if component == "label":
-            html_file.write("<label style=width: %s; height: %s; top: %s; left: %s;></label>" % (w, h, t, l))
-        if component == "canvas":
-            html_file.write("<canvas style=width: %s; height: %s; top: %s; left: %s;></canvas>" % (w, h, t, l))
-        html_file.write("</html>")
+            if component == "button":
+                html_file.write("<button style=width: %s; height: %s; top: %s; left: %s;>Text</button>" % (w, h, t, l))
+            if component == "textbox":
+                html_file.write("<textbox style=width: %s; height: %s; top: %s; left: %s;></textbox>" % (w, h, t, l))
+            if component == "label":
+                html_file.write("<label style=width: %s; height: %s; top: %s; left: %s;></label>" % (w, h, t, l))
+            if component == "canvas":
+                html_file.write("<canvas style=width: %s; height: %s; top: %s; left: %s;></canvas>" % (w, h, t, l))
+            html_file.write("</html>")
 
         # SAVE AS JAVAFX APP
         javafx_file = open("file.fx", "w")
 
         def writeJavaFX():
+
             if component == "label":
                     javafx_file.write(
                     "Label label1 = new Label(); label1.setStyle('width: %s; height: %s; top: %s; left: %s;');" % (
                     w, h, t, l))
 
-        if component == "button":
-                javafx_file.write(
-                "Button button1 = new Button(); button1.setStyle('width: %s; height: %s; top: %s; left: %s;');" % (
-                w, h, t, l))
+            if component == "button":
+                    javafx_file.write(
+                    "Button button1 = new Button(); button1.setStyle('width: %s; height: %s; top: %s; left: %s;');" % (
+                    w, h, t, l))
 
 
         def add_item(self, item_name, item_value):
