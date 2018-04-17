@@ -91,7 +91,7 @@ class IniEditor(tk.Tk):
 
         self.html_file = open("file.html", "w")
         # SAVE AS JAVAFX APP
-        self.javafx_file = open("Fxservidor.java", "w")
+        self.javafx_file = open("file.java", "w")
         self.component = "button"
         self.width = "100%"
         self.height = "20px"
@@ -198,17 +198,23 @@ class IniEditor(tk.Tk):
         self.html_file.close()
 
     def writeJavaFX(self):
+        print("WRITING TO JAVA")
         count = 0
         self.javafx_file.write("import javafx.application.Application; import javafx.event.ActionEvent; import javafx.event.EventHandler; import javafx.scene.Scene; import javafx.scene.control.Button; import javafx.scene.layout.StackPane; import javafx.stage.Stage; public class Fxservidor extends Application { public static void main(String[] args) { launch(args); } @Override public void start(Stage primaryStage) { primaryStage.setTitle('Hello World!');Button btn1 = new Button(); btn1.setText('Button');StackPane root = new StackPane();root.getChildren().add(btn1);primaryStage.setScene(new Scene(root, 300, 250));primaryStage.show();}}")
         for element in components:
             count += 1
             if isinstance(element, comp.ButtonComponent):
-                self.javafx_file.write("Button btn%d = new Button(); btn%d.setText('Button');" % (count, count))
+                buttonname = "btn%d" % count
+                button_write = f'Button {buttonname} = new Button(); {buttonname}.setText(\"{element.text}\"); {buttonname}.setLayoutX({element.x_pos}); {buttonname}.setLayoutY({element.y_pos}); {buttonname}.setMinWidth({element.width}); {buttonname}.setMinHeight({element.height});'
+                self.javafx_file.write(button_write)
             if isinstance(element, comp.LabelComponent):
                 self.javafx_file.write("Label label%d = new Label(); label%d.setText('Label')" % (count, count))
         self.javafx_file.write("}}")
         self.javafx_file.close()
-        os.system("Fxservidor.java")
+
+        cmd = "jar -cvfe TheJavaFile.jar <MainClass> file.class"
+        returned_val = os.system(cmd)
+        print(returned_val)
 
     def add_item(self, item_name, item_value):
         chosen_section = self.section_select.get(self.section_select.curselection())
