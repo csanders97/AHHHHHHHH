@@ -1,4 +1,4 @@
-class BaseComponent(object):
+class BaseComponentFactory(object):
 
     def __init__(self, text, width, height, x_pos, y_pos):
         self.width = width
@@ -6,6 +6,25 @@ class BaseComponent(object):
         self.text = text
         self.x_pos = x_pos
         self.y_pos = y_pos
+        super().__init__()
+
+    def get_width(self):
+        pass
+
+    def get_height(self):
+        pass
+
+    def get_text(self):
+        pass
+
+    def get_x_pos(self):
+        pass
+
+    def get_y_pos(self):
+        pass
+
+
+class ButtonComponent(BaseComponentFactory):
 
     def get_width(self):
         return self.width
@@ -23,29 +42,59 @@ class BaseComponent(object):
         return self.y_pos
 
 
-class ButtonComponent(BaseComponent):
 
-    def __init__(self, width, height, text, x_pos, y_pos):
-        super().__init__(text, width, height, x_pos, y_pos)
+class CanvasComponent(BaseComponentFactory):
+
+    def get_width(self):
+        return self.width
+
+    def get_height(self):
+        return self.height
+
+    def get_text(self):
+        return self.text
+
+    def get_x_pos(self):
+        return self.x_pos
+
+    def get_y_pos(self):
+        return self.y_pos
 
 
+class TextBoxComponent(BaseComponentFactory):
 
-class CanvasComponent(BaseComponent):
+    def get_width(self):
+        return self.width
 
-    def __init__(self, width, height, text, x_pos, y_pos):
-        super().__init__(text, width, height, x_pos, y_pos)
+    def get_height(self):
+        return self.height
+
+    def get_text(self):
+        return self.text
+
+    def get_x_pos(self):
+        return self.x_pos
+
+    def get_y_pos(self):
+        return self.y_pos
 
 
-class TextBoxComponent(BaseComponent):
+class LabelComponent(BaseComponentFactory):
 
-    def __init__(self, width, height, text, x_pos, y_pos):
-        super().__init__(text, width, height, x_pos, y_pos)
+    def get_width(self):
+        return self.width
 
+    def get_height(self):
+        return self.height
 
-class LabelComponent(BaseComponent):
+    def get_text(self):
+        return self.text
 
-    def __init__(self, width, height, text, x_pos, y_pos):
-        super().__init__(text, width, height, x_pos, y_pos)
+    def get_x_pos(self):
+        return self.x_pos
+
+    def get_y_pos(self):
+        return self.y_pos
 
 
 class ComponentsFactory(object):
