@@ -212,9 +212,20 @@ class IniEditor(tk.Tk):
         self.javafx_file.write("}}")
         self.javafx_file.close()
 
-        cmd = "jar -cvfe TheJavaFile.jar <MainClass> file.class"
+        # print("CUR DIR: " + str(os.getcwd()))
+        change_dir = os.system("cd " + str(os.getcwd()))
+        print(change_dir)
+        # print("DIR" + str(os.system("dir")))
+        print(os.system("set path=%path%;C:\Program Files\Java\jdk1.8.0_121\bin"))
+        print(os.system("javac file.java"))
+        print(os.system("dir"))
+        print(os.system("java file"))
+
+        cmd = "jar -cvfe file.jar <MainClass> file.class"
         returned_val = os.system(cmd)
         print(returned_val)
+
+        print(os.system("java -jar file.jar"))
 
     def add_item(self, item_name, item_value):
         chosen_section = self.section_select.get(self.section_select.curselection())
