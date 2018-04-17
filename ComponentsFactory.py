@@ -1,4 +1,5 @@
-class BaseComponentFactory(object):
+from abc import ABC, abstractmethod
+class BaseComponentFactory(ABC):
 
     def __init__(self, text, width, height, x_pos, y_pos):
         self.width = width
@@ -8,18 +9,23 @@ class BaseComponentFactory(object):
         self.y_pos = y_pos
         super().__init__()
 
+    @abstractmethod
     def get_width(self):
         pass
 
+    @abstractmethod
     def get_height(self):
         pass
 
+    @abstractmethod
     def get_text(self):
         pass
 
+    @abstractmethod
     def get_x_pos(self):
         pass
 
+    @abstractmethod
     def get_y_pos(self):
         pass
 
