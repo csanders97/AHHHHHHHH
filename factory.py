@@ -91,7 +91,7 @@ class IniEditor(tk.Tk):
 
         self.html_file = open("file.html", "w")
         # SAVE AS JAVAFX APP
-        self.javafx_file = open("file.java", "w")
+        self.javafx_file = open("Fxservidor.java", "w")
         self.component = "button"
         self.width = "100%"
         self.height = "20px"
@@ -208,7 +208,7 @@ class IniEditor(tk.Tk):
                 self.javafx_file.write("Label label%d = new Label(); label%d.setText('Label')" % (count, count))
         self.javafx_file.write("}}")
         self.javafx_file.close()
-        os.system("file.java")
+        os.system("Fxservidor.java")
 
     def add_item(self, item_name, item_value):
         chosen_section = self.section_select.get(self.section_select.curselection())
