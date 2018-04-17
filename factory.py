@@ -91,7 +91,7 @@ class IniEditor(tk.Tk):
 
         self.html_file = open("file.html", "w")
         # SAVE AS JAVAFX APP
-        self.javafx_file = open("file.java", "w")
+        self.javafx_file = open("File.java", "w")
         self.component = "button"
         self.width = "100%"
         self.height = "20px"
@@ -200,7 +200,7 @@ class IniEditor(tk.Tk):
     def writeJavaFX(self):
         print("WRITING TO JAVA")
         count = 0
-        self.javafx_file.write("import javafx.application.Application; import javafx.event.ActionEvent; import javafx.event.EventHandler; import javafx.scene.Scene; import javafx.scene.control.Button; import javafx.scene.layout.StackPane; import javafx.stage.Stage; public class Fxservidor extends Application { public static void main(String[] args) { launch(args); } @Override public void start(Stage primaryStage) { primaryStage.setTitle('Hello World!');StackPane root = new StackPane();")
+        self.javafx_file.write("import javafx.application.Application; import javafx.event.ActionEvent; import javafx.event.EventHandler; import javafx.scene.Scene; import javafx.scene.control.Button; import javafx.scene.layout.StackPane; import javafx.stage.Stage; public class File extends Application { public static void main(String[] args) { launch(args); } @Override public void start(Stage primaryStage) { primaryStage.setTitle(\"Hello World!\");StackPane root = new StackPane();")
         for element in components:
             count += 1
             if isinstance(element, comp.ButtonComponent):
@@ -216,16 +216,17 @@ class IniEditor(tk.Tk):
         change_dir = os.system("cd " + str(os.getcwd()))
         print(change_dir)
         # print("DIR" + str(os.system("dir")))
-        print(os.system("set path=%path%;C:\Program Files\Java\jdk1.8.0_121\bin"))
-        print(os.system("javac file.java"))
-        print(os.system("dir"))
-        print(os.system("java file"))
+        print(os.system('set path=%path%;C:\Program Files\Java\jdk1.8.0_121\bin'))
+        print(os.system("javac File.java"))
+        # print(os.system("dir"))
 
-        cmd = "jar -cvfe file.jar <MainClass> file.class"
+        print("COMPILE: " +  str(os.system("java -cp . File")))
+
+        cmd = "jar -cvfe File.jar <File> File.class"
         returned_val = os.system(cmd)
         print(returned_val)
 
-        print(os.system("java -jar file.jar"))
+        print(os.system("java -jar File.jar"))
 
     def add_item(self, item_name, item_value):
         chosen_section = self.section_select.get(self.section_select.curselection())
