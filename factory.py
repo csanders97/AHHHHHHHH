@@ -4,6 +4,7 @@ import tkinter.messagebox as msg
 import configparser as cp
 import ComponentsFactory as comp
 import ntpath
+import os
 
 comp_type_init = ""
 components = []
@@ -79,14 +80,13 @@ class AddSectionForm(CentralForm):
     def remove_section(self):
         ini_editor.section_select.delete(0, 0)
         self.remove_button.destroy()
-        print("removed")
 
 class IniEditor(tk.Tk):
 
     def __init__(self):
         super().__init__()
 
-        self.title("UI Creator")
+        self.title("Factory Pattern")
         self.geometry("800x600")
 
         self.html_file = open("file.html", "w")
@@ -199,7 +199,7 @@ class IniEditor(tk.Tk):
 
     def writeJavaFX(self):
         count = 0
-        self.javafx_file.write("import javafx.application.Application; import javafx.event.ActionEvent; import javafx.event.EventHandler; import javafx.scene.Scene; import javafx.scene.control.Button; import javafx.scene.layout.StackPane; import javafx.stage.Stage; public class Fxservidor extends Application { public static void main(String[] args) { launch(args); } @Override public void start(Stage primaryStage) { primaryStage.setTitle('Hello World!');")
+        self.javafx_file.write("import javafx.application.Application; import javafx.event.ActionEvent; import javafx.event.EventHandler; import javafx.scene.Scene; import javafx.scene.control.Button; import javafx.scene.layout.StackPane; import javafx.stage.Stage; public class Fxservidor extends Application { public static void main(String[] args) { launch(args); } @Override public void start(Stage primaryStage) { primaryStage.setTitle('Hello World!');Button btn1 = new Button(); btn1.setText('Button');StackPane root = new StackPane();root.getChildren().add(btn1);primaryStage.setScene(new Scene(root, 300, 250));primaryStage.show();}}")
         for element in components:
             count += 1
             if isinstance(element, comp.ButtonComponent):
@@ -208,8 +208,7 @@ class IniEditor(tk.Tk):
                 self.javafx_file.write("Label label%d = new Label(); label%d.setText('Label')" % (count, count))
         self.javafx_file.write("}}")
         self.javafx_file.close()
-
-
+        os.system("file.java")
 
     def add_item(self, item_name, item_value):
         chosen_section = self.section_select.get(self.section_select.curselection())
